@@ -1,0 +1,3 @@
+<% @query_results.each{|hash| %>
+    $('#results').append("<div><a target='_blank' href='<%=hash[:url]%>'><h4><%=hash[:title]%></h4></a><span><%=hash[:extract]%></span></div>");
+<% } %>

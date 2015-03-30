@@ -13,6 +13,11 @@
         color: orangered;
     }
 
+    h4 {
+        color: orangered;
+        font-weight: 600;
+    }
+
     .lead {
         color: orangered;
     }
@@ -66,16 +71,29 @@
     window.scroll(0,0);
     $('body').height(1210);
     //$('body').css({'overflow-y':'hidden'});
-    function start_query(){
+    function start_query() {
         start_graph();
-        window.setTimeout(function(){
+        window.setTimeout(function () {
             stop_graph();
-            $('#form').ScrollTo({duration: 2000, offsetTop: 13, offsetLeft: 0,
-                callback: function(){
-                    $('body').css({'overflow-y':'scroll'});
-                }});
-        },6000);
+            query();
+            $('#form').ScrollTo({
+                duration: 2000, offsetTop: 13, offsetLeft: 0,
+                callback: function () {
+                    $('body').css({'overflow-y': 'scroll'});
+                }
+            });
+        }, 6000);
     }
+
+    function query() {
+        $.ajax({
+            type: "GET",
+            url: "/query",
+            data: { query_string: "Filip" },
+            format: 'js'
+        });
+    }
+
 </script>
 
 <div class="container-full">
@@ -97,7 +115,7 @@
 
   </div> <!-- /row -->
   <div class="container" style="margin-top: 15px;width: 1000px">
-    <div id="results" class="col-md-6"></div>
+    <div id="results" style="color: black" class="col-md-6"></div>
     <div class="col-md-6"></div>
   </div>
 </div>
