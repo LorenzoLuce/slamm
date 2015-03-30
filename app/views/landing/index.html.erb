@@ -1,0 +1,620 @@
+<style>
+    @import url(http://fonts.googleapis.com/css?family=Antic+Slab);
+
+    body {
+        height:100%;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
+    h1 {
+        font-family: 'Antic Slab', serif;
+        font-size:120px;
+        color: orangered;
+    }
+
+    .lead {
+        color: orangered;
+    }
+
+    /* Custom container */
+    .container-full {
+        margin: 0 auto;
+        width: 100%;
+        min-height:100%;
+        color:#eee;
+        /*background-image: url("/assets/poly2.jpg");
+        background-repeat: no-repeat;
+        background-size: contain;*/
+    }
+
+    .container-full a {
+        color:#efefef;
+        text-decoration:none;
+    }
+
+
+    .v-center {
+        margin-top:-15px;
+    }
+
+    .v-center2 {
+        margin-top: 105px;
+    }
+    .alfbutton {
+        border-color: orange !important;
+        background-image: none !important;
+        background-color: orange !important;
+        /*height: 65px !important;
+        font-size: x-large !important;
+        width: 75px !important;*/
+    }
+    .parallax-window {
+        min-height: 600px;
+        background: transparent;
+    }
+
+    #graph-container {
+        height: 250px;
+        width: 100%;
+        margin-left: -50%;
+    }
+
+</style>
+
+<script>
+    window.scroll(0,0);
+    $('body').height(1210);
+    //$('body').css({'overflow-y':'hidden'});
+    function start_query(){
+        start_graph();
+        window.setTimeout(function(){
+            stop_graph();
+            $('#form').ScrollTo({duration: 2000, offsetTop: 13, offsetLeft: 0,
+                callback: function(){
+                    $('body').css({'overflow-y':'scroll'});
+                }});
+        },6000);
+    }
+</script>
+
+<div class="container-full">
+
+  <div class="row">
+    <div class="parallax-window" data-parallax="scroll" data-image-src="/assets/poly2.jpg"></div>
+    <div style="margin-top: -400px" class="col-lg-12 text-center">
+      <div class="v-center">
+        <div id="graph-container"></div>
+      </div>
+
+      <div id="form" class="v-center2 col-lg-12">
+        <div class="input-group input-group-lg col-sm-offset-4 col-sm-4">
+          <input type="text" style="border-color: orange;" class="center-block form-control input-lg" placeholder="Search...">
+          <span class="input-group-btn"><button class="alfbutton btn btn-lg btn-primary" onclick="start_query()" type="button">OK</button></span>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- /row -->
+  <div class="container" style="margin-top: 15px;width: 1000px">
+    <div id="results" class="col-md-6"></div>
+    <div class="col-md-6"></div>
+  </div>
+</div>
+<script>
+    var g = {
+        nodes: [],
+        edges: []
+    };
+    var L = 4;
+    var M = 3;
+    var step=0;
+    // S
+    g.nodes.push({
+        id: 'n',
+        label: '',
+        x: 0,
+        y: 1,
+        nor_x: 0,
+        nor_y: 1,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 1 % L,
+        grid_y: Math.floor(1 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        color: '#DF0101',
+        size: 1,
+        nor_color: '#DF0101',
+        nor_size: 1
+    });
+    g.nodes.push({
+        id: 'n2',
+        label: '',
+        x: 1.5,
+        y: 0,
+        nor_x: 1.5,
+        nor_y: 0,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 2 % L,
+        grid_y: Math.floor(2 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        color: '#DF0101',
+        size: 1,
+        nor_color: '#DF0101',
+        nor_size: 1
+    });
+    g.nodes.push({
+        id: 'n3',
+        label: '',
+        x: 3,
+        y: 1,
+        nor_x: 3,
+        nor_y: 1,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 3 % L,
+        grid_y: Math.floor(3 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        color: '#DF0101',
+        size: 1,
+        nor_color: '#DF0101',
+        nor_size: 1
+    });
+    g.nodes.push({
+        id: 'n4',
+        label: '',
+        x: 0,
+        y: 2,
+        nor_x: 0,
+        nor_y: 2,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 4 % L,
+        grid_y: Math.floor(4 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        color: '#DF0101',
+        size: 1,
+        nor_color: '#DF0101',
+        nor_size: 1
+    });
+
+    g.nodes.push({
+        id: 'n6',
+        label: '',
+        x: 1.5,
+        y: 3,
+        nor_x: 1.5,
+        nor_y: 3,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 5 % L,
+        grid_y: Math.floor(5 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#DF0101',
+        nor_size: 1,
+        color: '#DF0101',
+        size: 1
+    });
+
+    g.nodes.push({
+        id: 'n7',
+        label: '',
+        x: 3,
+        y: 2,
+        nor_x: 3,
+        nor_y: 2,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 6 % L,
+        grid_y: Math.floor(6 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#DF0101',
+        nor_size: 1,
+        color: '#DF0101',
+        size: 1
+    });
+    // L
+    g.nodes.push({
+        id: 'n8',
+        label: '',
+        x: 4.5,
+        y: 2.5,
+        nor_x: 4.5,
+        nor_y: 2.5,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 7 % L,
+        grid_y: Math.floor(7 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#ec5148',
+        nor_size: 1,
+        color: '#ec5148',
+        size: 1
+    });
+    g.nodes.push({
+        id: 'n9',
+        label: '',
+        x: 4.5,
+        y: 0.5,
+        nor_x: 4.5,
+        nor_y: 0.5,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 8 % L,
+        grid_y: Math.floor(8 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#ec5148',
+        nor_size: 1,
+        color: '#ec5148',
+        size: 1
+    });
+    /*g.nodes.push({
+        id: 'n11',
+        label: '',
+        x: 4.5,
+        y: 6,
+        nor_x: 4.5,
+        nor_y: 6,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 9 % L,
+        grid_y: Math.floor(9 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#ffffff',
+        nor_size: 1,
+        color: '#ffffff',
+        size: 1
+    });*/
+    g.nodes.push({
+        id: 'n12',
+        label: '',
+        x: 6,
+        y: 2.5,
+        nor_x: 6,
+        nor_y: 2.5,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 10 % L,
+        grid_y: Math.floor(10 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#ec5148',
+        nor_size: 1,
+        color: '#ec5148',
+        size: 1
+    });
+    // A
+    g.nodes.push({
+        id: 'n13',
+        label: '',
+        x: 7.5,
+        y: 2.5,
+        nor_x: 7.5,
+        nor_y: 2.5,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 11 % L,
+        grid_y: Math.floor(11 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#FF8000',
+        nor_size: 1,
+        color: '#FF8000',
+        size: 1
+    });
+    g.nodes.push({
+        id: 'n14',
+        label: '',
+        x: 8.25,
+        y: 0.5,
+        nor_x: 8.25,
+        nor_y: 0.5,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 12 % L,
+        grid_y: Math.floor(12 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#FF8000',
+        nor_size: 1,
+        color: '#FF8000',
+        size: 1
+    });
+    g.nodes.push({
+        id: 'n15',
+        label: '',
+        x: 9,
+        y: 2.5,
+        nor_x: 9,
+        nor_y: 2.5,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 13 % L,
+        grid_y: Math.floor(13 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#FF8000',
+        nor_size: 1,
+        color: '#FF8000',
+        size: 1
+    });
+    // M
+    g.nodes.push({
+        id: 'n16',
+        label: '',
+        x: 10.5,
+        y: 0.5,
+        nor_x: 10.5,
+        nor_y: 0.5,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 14 % L,
+        grid_y: Math.floor(14 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#F7FE2E',
+        nor_size: 1,
+        color: '#F7FE2E',
+        size: 1
+    });
+    g.nodes.push({
+        id: 'n17',
+        label: '',
+        x: 10.5,
+        y: 2.5,
+        nor_x: 10.5,
+        nor_y: 2.5,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 15 % L,
+        grid_y: Math.floor(15 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#F7FE2E',
+        nor_size: 1,
+        color: '#F7FE2E',
+        size: 1
+    });
+    g.nodes.push({
+        id: 'n18',
+        label: '',
+        x: 12.75,
+        y: 0.5,
+        nor_x: 12.75,
+        nor_y: 0.5,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 16 % L,
+        grid_y: Math.floor(16 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#F7FE2E',
+        nor_size: 1,
+        color: '#F7FE2E',
+        size: 1
+    });
+    g.nodes.push({
+        id: 'n19',
+        label: '',
+        x: 12.75,
+        y: 2.5,
+        nor_x: 12.75,
+        nor_y: 2.5,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 17 % L,
+        grid_y: Math.floor(17 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#F7FE2E',
+        nor_size: 1,
+        color: '#F7FE2E',
+        size: 1
+    });
+    g.nodes.push({
+        id: 'n20',
+        label: '',
+        x: 11.62,
+        y: 1.5,
+        nor_x: 11.62,
+        nor_y: 1.5,
+        random_x: Math.random(),
+        random_y: Math.random(),
+        random_color:getRandomColor(),
+        random_size: Math.random(),         random2_x: Math.random(),         random2_y: Math.random(),         random2_color:getRandomColor(),         random2_size: Math.random(),
+        grid_x: 18 % L,
+        grid_y: Math.floor(18 / L),
+        grid_color: '#ccc',
+        grid_size: 1, grid2_x: 1 % M, grid2_y: Math.floor(1 / M), grid2_color: '#ccc', grid2_size: 1,
+        nor_color: '#F7FE2E',
+        nor_size: 1,
+        color: '#F7FE2E',
+        size: 1
+    });
+    //archi
+    //s
+     g.edges.push({
+     id: 'e1',
+     source: 'n2',
+     target: 'n',
+     size: 1
+     });
+    g.edges.push({
+        id: 'e2',
+        source: 'n',
+        target: 'n7',
+        size: 1
+    });
+    g.edges.push({
+        id: 'e3',
+        source: 'n7',
+        target: 'n6',
+        size: 1
+    });
+    g.edges.push({
+        id: 'e4',
+        source: 'n6',
+        target: 'n4',
+        size: 1
+    });
+    g.edges.push({
+        id: 'e5',
+        source: 'n3',
+        target: 'n2',
+        size: 1
+    });
+    // L
+    g.edges.push({
+        id: 'e6',
+        source: 'n9',
+        target: 'n8',
+        size: 1
+    });
+    g.edges.push({
+        id: 'e7',
+        source: 'n8',
+        target: 'n12',
+        size: 1
+    });
+    //A
+    g.edges.push({
+        id: 'e8',
+        source: 'n13',
+        target: 'n14',
+        size: 1
+    });
+    g.edges.push({
+        id: 'e9',
+        source: 'n14',
+        target: 'n15',
+        size: 1
+    });
+    // M
+    g.edges.push({
+        id: 'e10',
+        source: 'n17',
+        target: 'n16',
+        size: 1
+    });
+    g.edges.push({
+        id: 'e11',
+        source: 'n16',
+        target: 'n20',
+        size: 1
+    });
+    g.edges.push({
+        id: 'e12',
+        source: 'n20',
+        target: 'n18',
+        size: 1
+    });
+    g.edges.push({
+        id: 'e13',
+        source: 'n18',
+        target: 'n19',
+        size: 1
+    });
+    // Instantiate sigma:
+    s = new sigma({
+        graph: g,
+        container: 'graph-container',
+        settings: {
+            defaultEdgeColor: '#ffffff',
+            mouseEnabled: false,
+            eventsEnabled: false,
+            animationsTime: 1000
+        }
+    });
+    function start_graph() {
+        sigma.plugins.animate(
+                s,
+                {
+                    x: 'grid_x',
+                    y: 'grid_y',
+                    color: 'grid_color',
+                    size: 'grid_size'
+                }
+        );
+        graph_anima = setInterval(function () {
+            if (step == 3)
+                step = 0;
+            var prefix = ['grid2_', 'nor_', 'grid2_', 'grid_'][step];
+            step++;
+            sigma.plugins.animate(
+                    s,
+                    {
+                        x: prefix + 'x',
+                        y: prefix + 'y',
+                        color: prefix + 'color',
+                        size: prefix + 'size'
+                    }
+            );
+        }, 2000);
+    }
+    function stop_graph(){
+        clearInterval(graph_anima);
+        sigma.plugins.animate(
+                s,
+                {
+                    x: 'nor_x',
+                    y: 'nor_y',
+                    color: 'nor_color',
+                    size: 'nor_size'
+                }
+        );
+    }
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+</script>
