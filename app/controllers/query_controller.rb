@@ -6,11 +6,13 @@ class QueryController < ApplicationController
 
   def index
     # si potrebbero cachare tutti i risultati e restituire solo i primi N, e poi se clicca next vengono caricati
+    start_time = Time.now
     results = Solr.query params[:query_string] # ritorna un array di hash
+    @results_number = results.size
+    @time = (start_time-Time.now).to_s
     i=0
     @query_pages = (results.size.to_f/RES_PER_PAG.to_f).ceil()
     @query_results = []
-
     @query_pages.times { |time|
       array_page = []
       RES_PER_PAG.times { |time|
