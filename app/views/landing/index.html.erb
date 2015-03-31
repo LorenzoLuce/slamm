@@ -76,6 +76,7 @@
         window.setTimeout(function () {
             stop_graph();
             query();
+            $('body').css({'height':'100%'});
             $('#form').ScrollTo({
                 duration: 2000, offsetTop: 13, offsetLeft: 0,
                 callback: function () {
@@ -88,9 +89,8 @@
     function query() {
         $.ajax({
             type: "GET",
-            url: "/query",
-            data: { query_string: "Filip" },
-            format: 'js'
+            url: "/query.js",
+            data: { query_string: "Filip" }
         });
     }
 
@@ -115,7 +115,7 @@
 
   </div> <!-- /row -->
   <div class="container" style="margin-top: 15px;width: 1000px">
-    <div id="results" style="color: black" class="col-md-6"></div>
+    <div role="tabpanel" id="results" style="color: black" class="col-md-6"></div>
     <div class="col-md-6"></div>
   </div>
 </div>

@@ -1,3 +1,16 @@
-<% @query_results.each{|hash| %>
-    $('#results').append("<div><a target='_blank' href='<%=hash[:url]%>'><h4><%=hash[:title]%></h4></a><span><%=hash[:extract]%></span></div>");
-<% } %>
+<%
+string = "<div class='tab-content'>"
+@query_results.each_with_index{|array, index|
+    string = string + "<div role='tabpanel' class='tab-pane' id='"+index.to_s+"'>"
+    array.each{ |hash|
+        string = string + "<div><a target='_blank' href='"+hash[:url]+"'><h4>"+hash[:title]+"</h4></a><span>"+hash[:extract]+"</span></div>"
+    }
+    string = string + "</div>"
+}
+string = string + "</div><ul role='tablist' class='pagination'>"
+@query_pages.times{ |time|
+    string = string + "<li role='presentation'><a href='#"+time.to_s+"' aria-controls='"+time.to_s+"' role='tab' data-toggle='tab'>"+time.to_s+"</a></li>"
+}
+string = string + "</ul>"
+%>
+$('#results').html("<%=string.html_safe%>");
