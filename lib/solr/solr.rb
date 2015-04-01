@@ -1,26 +1,12 @@
 module Solr
 
-  java_import Java::it.SLaMM.client.QueryFactory
-
   def self.query query_string
-=begin
-    [{microdata: 'nannoloneeee', url: '#', title: 'titleneeee1',extract: 'sono una paginuna paginonao una paginona una paginona una paginouna paginon una paginona una paginona '},
-     {microdata: 'nannoloneeee', url: '#', title: 'titleneeee2',extract: 'sono una paginuna paginonao una paginona una paginona una paginouna paginon una paginona una paginona '},
-     {microdata: '', url: '#', title: 'titleneeee3',extract: 'sono una paginuna paginonao una paginona una paginona una paginouna paginon una paginona una paginona '},
-     {microdata: 'nannoloneeee', url: '#', title: 'titleneeee4',extract: 'sono una paginuna paginonao una paginona una paginona una paginouna paginon una paginona una paginona '},
-     {microdata: '', url: '#', title: 'titleneeee5',extract: 'sono una paginuna paginonao una paginona una paginona una paginouna paginon una paginona una paginona '},
-     {microdata: 'nannoloneeee', url: '#', title: 'titleneeee6',extract: 'sono una paginuna paginonao una paginona una paginona una paginouna paginon una paginona una paginona '},
-     {microdata: 'nannoloneeee', url: '#', title: 'titleneeee7',extract: 'sono una paginuna paginonao una paginona una paginona una paginouna paginon una paginona una paginona '}
-    ]
-=end
-    factory = Java::it.SLaMM.client.QueryFactory.new()
-    factory.setQuery(query_string)
-    list = factory.executeQueryMicrodataBoosted() # restituisce una linked list di solr document
-    arr = []
-    list.each{ |doc|
-      arr << doc.toString()
-    }
-    puts arr.to_s
+    query_string = 'q='+query_string+'&qt=spellCheckCompRH&defType=dismax&qf=microdata%5E30+title%5E10&hl=true&hl.snippet=1&hl.field=html&wt=ruby'
+    h = Net::HTTP.new('localhost',8983)
+    response = h.get('/solr/SLaMM/select?'+query_string)
+    rsp = eval(response.body)
+    #[[{'url'=>']','title'=>'rgrg','html'=>'rgtrgtgtg','microdata'=>'micro'},{'url'=>']','title'=>'rgrg','html'=>'rgtrgtgtg','microdata'=>'micro'}],98]
+    [rsp['response']['docs'], rsp['response']['numFound']]
   end
 
 end

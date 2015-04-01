@@ -3,13 +3,13 @@ string = "<div class='text-center'>"+@results_number.to_s+" results found in "+@
 @query_results.each_with_index{|array, index|
     index==0 ? classe='in active' : classe=''
     string = string + "<div role='tabpanel' class='tab-pane fade "+classe+"' id='"+index.to_s+"'>"
-    array.each{ |hash|
-        if !hash[:microdata].strip.blank?
-            microd = "<a class='microdata' data-toggle='popover' title='MicroData' data-content='"+hash[:microdata]+"' href='#a'><span class='glyphicon glyphicon-share' aria-hidden='true'></span></a>"
+    array.each_with_index{ |hash, ind|
+        if !hash['microdata'].to_s.strip.blank?
+            microd = "<a class='microdata' data-toggle='popover' title='MicroData' data-content='"+hash['microdata'].gsub('"','').gsub("'",'').gsub("’",'').gsub('”','').gsub('“','')+"' href='#a'><span class='glyphicon glyphicon-share' aria-hidden='true'></span></a>"
         else
             microd = "<a class='microdata' style='color: transparent !important'><span class='glyphicon glyphicon-share' aria-hidden='true'></span></a>"
-        end
-        string = string + "<div><div style='padding-top: 10px; padding-bottom: 10px;'><a target='_blank' href='"+hash[:url]+"'><h4>"+hash[:title]+"</h4></a>"+microd+"<a style='color:orange; float:right; margin-right: 10px;' href='#a'><span class='glyphicon glyphicon-file' aria-hidden='true'></span></a></div><span>"+hash[:extract]+"</span></div>"
+        end                                                                                                                              #"+hash['title'].to_s+"                                                                                                                                                                                        #"+hash['html'].to_s+"
+        string = string + "<div><div style='padding-top: 10px; padding-bottom: 10px;'><a target='_blank' href='"+hash['url'].to_s+"'><h4>"+hash['title'][0].gsub('"','')+"</h4></a>"+microd+"<form id='form"+ind.to_s+"' style='display: inline;' action='/show_file' method='post' target='_blank'><input type='hidden' name='html' value='"+hash['id'].to_s+"'><a style='color:orange; float:right; margin-right: 10px;' href='#a' onclick='this.parentNode.submit()'><span class='glyphicon glyphicon-file' aria-hidden='true'></span></a></form></div><span>content</span></div>"
     }
     string = string + "</div>"
 }
@@ -20,5 +20,6 @@ string = string + "</div><ul style='margin-top:30px' role='tablist' class='pagin
 }
 string = string + "</ul>"
 %>
-$('#results').html("<%=string.html_safe%>");
+var jString = "<%=string.html_safe%>";
+$('#results').html(jString);
 $('.microdata').popover();

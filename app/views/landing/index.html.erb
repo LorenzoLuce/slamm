@@ -114,7 +114,7 @@
         $.ajax({
             type: "GET",
             url: "/query.js",
-            data: { query_string: "Filip" }
+            data: { query_string: $('#name_query').val()}
         });
     }
 
@@ -131,7 +131,7 @@
 
       <div id="form" class="v-center2 col-lg-12">
         <div class="input-group input-group-lg col-sm-offset-4 col-sm-4">
-          <input type="text" style="border-color: orange;" class="center-block form-control input-lg" placeholder="Search...">
+          <input id="name_query" type="text" style="border-color: orange;" class="center-block form-control input-lg" placeholder="Search...">
           <span class="input-group-btn"><button class="alfbutton btn btn-lg btn-primary" onclick="start_query()" type="button">OK</button></span>
         </div>
       </div>
